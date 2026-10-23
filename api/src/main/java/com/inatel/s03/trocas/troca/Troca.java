@@ -1,6 +1,16 @@
 package com.inatel.s03.trocas.troca;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.*;
+
+@Entity(name = "Troca")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Troca {
+    @Id
     private String id;
     private String idJogador;
     //to do: status ENUM
@@ -9,9 +19,7 @@ public class Troca {
     //to do: cartaDesejada
     //to do propostas (list propostas)
 
-    public Troca(String id, String idJogador, int limitePropostas) {
+    public Troca(String id){
         this.id = id;
-        this.idJogador = idJogador;
-        this.limitePropostas = limitePropostas;
     }
 }

@@ -1,0 +1,9 @@
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/TrocasApplication.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/carta/Carta.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/controllers/TrocaController.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/proposta/Proposta.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/proposta/PropostaRepository.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/services/PropostaService.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/services/TrocaService.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/troca/Troca.java
+/Users/lidia/Developer/arquitetura de software/trocas/api/src/main/java/com/inatel/s03/trocas/troca/TrocaRepository.java

@@ -1,0 +1,9 @@
+com/inatel/s03/trocas/troca/TrocaRepository.class
+com/inatel/s03/trocas/TrocasApplication.class
+com/inatel/s03/trocas/services/TrocaService.class
+com/inatel/s03/trocas/carta/Carta.class
+com/inatel/s03/trocas/proposta/PropostaRepository.class
+com/inatel/s03/trocas/troca/Troca.class
+com/inatel/s03/trocas/services/PropostaService.class
+com/inatel/s03/trocas/controllers/TrocaController.class
+com/inatel/s03/trocas/proposta/Proposta.class
