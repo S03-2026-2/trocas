@@ -1,7 +1,7 @@
 package com.inatel.s03.trocas.services;
 
 import com.inatel.s03.trocas.proposta.Proposta;
-import com.inatel.s03.trocas.proposta.PropostaRepository;
+import com.inatel.s03.trocas.repositories.PropostaRepository;
 
 public class PropostaService {
     private final PropostaRepository propostaRepository;

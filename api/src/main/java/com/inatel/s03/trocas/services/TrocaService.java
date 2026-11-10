@@ -1,7 +1,7 @@
 package com.inatel.s03.trocas.services;
 
 import com.inatel.s03.trocas.troca.Troca;
-import com.inatel.s03.trocas.troca.TrocaRepository;
+import com.inatel.s03.trocas.repositories.TrocaRepository;
 
 public class TrocaService {
     private final TrocaRepository trocaRepository;

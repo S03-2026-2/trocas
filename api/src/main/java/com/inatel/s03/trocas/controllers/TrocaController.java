@@ -1,5 +1,6 @@
 package com.inatel.s03.trocas.controllers;
 
+import com.inatel.s03.trocas.repositories.TrocaRepository;
 import com.inatel.s03.trocas.troca.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
