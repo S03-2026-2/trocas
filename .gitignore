@@ -1,0 +1,43 @@
+# Build (Maven)
+target/
+!.mvn/wrapper/maven-wrapper.jar
+HELP.md
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Banco local (H2 em arquivo, se usado)
+*.db
+*.mv.db
+*.trace.db
+
+# Logs
+*.log
