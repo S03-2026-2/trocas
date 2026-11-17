@@ -61,6 +61,13 @@
             <artifactId>flyway-mysql</artifactId>
         </dependency>
 
+        <!-- Banco de produção (Aiven) -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Banco de desenvolvimento e testes -->
         <dependency>
             <groupId>com.h2database</groupId>

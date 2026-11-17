@@ -41,3 +41,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Variáveis de ambiente com segredos (o modelo .env.example é versionado)
+.env
+.env.*
+!.env.example
