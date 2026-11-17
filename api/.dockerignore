@@ -1,0 +1,10 @@
+# Arquivos que não entram no contexto do build do Docker
+target/
+.idea/
+.vscode/
+*.iml
+.mvn/
+mvnw
+mvnw.cmd
+.env
+docker-compose.yml

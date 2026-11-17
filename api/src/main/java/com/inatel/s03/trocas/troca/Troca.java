@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -23,13 +25,16 @@ import java.util.UUID;
 public class Troca {
 
     @Id
+    @Column(length = 36)
     private String id;
 
     @Column(nullable = false)
     private String idJogador;
 
+    /** Gravado como texto (VARCHAR) em qualquer banco; sem isso o Hibernate usaria o tipo ENUM nativo do MySQL. */
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false, length = 20)
     private StatusTroca status;
 
     @Column(nullable = false)

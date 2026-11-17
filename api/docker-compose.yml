@@ -1,0 +1,51 @@
+# Sobe a API com o perfil de produção + um MySQL local, para testar antes do deploy no Render.
+#
+#   cd api
+#   docker compose up --build        -> API em http://localhost:8080
+#   docker compose down              -> para tudo (os dados ficam no volume)
+#   docker compose down -v           -> para tudo e apaga os dados
+#
+# Porta 8080 ocupada (ex.: a API rodando pela IDE)? Escolha outra:
+#   API_PORT=8081 docker compose up --build
+#
+# As credenciais abaixo são só para uso local. As de produção ficam no painel do Render.
+
+services:
+  mysql:
+    # Mesma versão principal usada na Aiven
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: trocas
+      MYSQL_USER: trocas
+      MYSQL_PASSWORD: trocas
+      MYSQL_ROOT_PASSWORD: root
+    # Igual à Aiven: recusa tabelas sem chave primária
+    command: ["--sql-require-primary-key=ON"]
+    ports:
+      - "${MYSQL_PORT:-3307}:3306" # 3307 na sua máquina, para não conflitar com um MySQL já instalado
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      # Conexão por TCP: só responde depois que o MySQL termina a inicialização
+      test: ["CMD-SHELL", "mysql -h 127.0.0.1 -utrocas -ptrocas -e 'SELECT 1' trocas"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  api:
+    build: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/trocas?sslMode=DISABLED&allowPublicKeyRetrieval=true
+      DB_USERNAME: trocas
+      DB_PASSWORD: trocas
+    ports:
+      - "${API_PORT:-8080}:8080"
+    # Mesmo limite de memória do plano gratuito do Render
+    mem_limit: 512m
+
+volumes:
+  mysql-data:
