@@ -1,161 +1,218 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Classes - Trocas" id="trocas">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="877" dy="968" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1760" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="svc" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;TrocaService&lt;/b&gt;" vertex="1">
-          <mxGeometry height="226" width="400" x="330" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="svc_a" parent="svc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- inventario: Inventario&lt;br&gt;- publicador: PublicadorEventos" vertex="1">
-          <mxGeometry height="44" width="400" y="26" as="geometry" />
-        </mxCell>
-        <mxCell id="svc_l" parent="svc" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
-          <mxGeometry height="8" width="400" y="70" as="geometry" />
-        </mxCell>
-        <mxCell id="svc_m" parent="svc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ criarTroca(idJogador: String, ofertada: Carta, desejada: Carta): Troca&lt;br&gt;+ criarProposta(idTroca: String, idJogador: String, ofertada: Carta): Proposta&lt;br&gt;+ aceitarProposta(idTroca: String, idProposta: String): void&lt;br&gt;+ cancelarTroca(idTroca: String): void&lt;br&gt;+ cancelarProposta(idTroca: String, idProposta: String): void&lt;br&gt;+ consultarTrocas(): List&amp;lt;Troca&amp;gt;&lt;br&gt;+ consultarPropostas(idTroca: String): List&amp;lt;Proposta&amp;gt;" vertex="1">
-          <mxGeometry height="148" width="400" y="78" as="geometry" />
-        </mxCell>
         <mxCell id="inv" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«interface»&lt;br&gt;&lt;b&gt;Inventario&lt;/b&gt;" vertex="1">
-          <mxGeometry height="80" width="260" x="20" y="30" as="geometry" />
+          <mxGeometry height="84" width="270" x="20" y="40" as="geometry" />
         </mxCell>
         <mxCell id="inv_m" parent="inv" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ possuiCarta(idJogador: String, idCarta: String): boolean" vertex="1">
-          <mxGeometry height="40" width="260" y="40" as="geometry" />
+          <mxGeometry height="44" width="270" y="40" as="geometry" />
         </mxCell>
         <mxCell id="invimpl" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;DistribuicaoCartas&lt;/b&gt;" vertex="1">
-          <mxGeometry height="70" width="260" x="20" y="150" as="geometry" />
+          <mxGeometry height="70" width="270" x="20" y="170" as="geometry" />
         </mxCell>
         <mxCell id="invimpl_m" parent="invimpl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ possuiCarta(idJogador: String, idCarta: String): boolean" vertex="1">
-          <mxGeometry height="44" width="260" y="26" as="geometry" />
+          <mxGeometry height="44" width="270" y="26" as="geometry" />
         </mxCell>
-        <mxCell id="pub" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«interface»&lt;br&gt;&lt;b&gt;PublicadorEventos&lt;/b&gt;" vertex="1">
-          <mxGeometry height="68" width="300" x="800" y="30" as="geometry" />
+        <mxCell id="tsvc" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«service»&lt;br&gt;&lt;b&gt;TrocaService&lt;/b&gt;" vertex="1">
+          <mxGeometry height="262" width="440" x="340" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="pub_m" parent="pub" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ publicar(evento: TrocaRealizadaEvent): void" vertex="1">
-          <mxGeometry height="28" width="300" y="40" as="geometry" />
+        <mxCell id="tsvc_a" parent="tsvc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- CAMPOS_ORDENAVEIS: List&amp;lt;String&amp;gt; {static}&lt;br&gt;- trocaRepository: TrocaRepository&lt;br&gt;- propostaRepository: PropostaRepository&lt;br&gt;- inventario: Inventario" vertex="1">
+          <mxGeometry height="80" width="440" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="pubimpl" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;BrokerPublicador&lt;/b&gt;" vertex="1">
-          <mxGeometry height="54" width="300" x="800" y="150" as="geometry" />
+        <mxCell id="tsvc_l0" parent="tsvc" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="440" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="pubimpl_m" parent="pubimpl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ publicar(evento: TrocaRealizadaEvent): void" vertex="1">
-          <mxGeometry height="28" width="300" y="26" as="geometry" />
+        <mxCell id="tsvc_m" parent="tsvc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ criarTroca(idJogador: String, idCartaOfertada: String, idCartaDesejada: String, limitePropostas: int): Troca&lt;br&gt;+ consultarTrocas(filtro: FiltroTrocas, paginacao: Pageable): Page&amp;lt;Troca&amp;gt;&lt;br&gt;+ buscarTroca(idTroca: String): Troca&lt;br&gt;+ cancelarTroca(idTroca: String): Troca&lt;br&gt;- validarOrdenacao(ordenacao: Sort): void" vertex="1">
+          <mxGeometry height="134" width="440" y="128" as="geometry" />
         </mxCell>
-        <mxCell id="evt" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;TrocaRealizadaEvento&lt;/b&gt;" vertex="1">
-          <mxGeometry height="154" width="300" x="790" y="270" as="geometry" />
+        <mxCell id="psvc" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«service»&lt;br&gt;&lt;b&gt;PropostaService&lt;/b&gt;" vertex="1">
+          <mxGeometry height="334" width="460" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="psvc_a" parent="psvc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- CAMPOS_ORDENAVEIS: List&amp;lt;String&amp;gt; {static}&lt;br&gt;- propostaRepository: PropostaRepository&lt;br&gt;- trocaService: TrocaService&lt;br&gt;- inventario: Inventario&lt;br&gt;- publicador: PublicadorEventos  (a implementar)" vertex="1">
+          <mxGeometry height="98" width="460" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="psvc_l0" parent="psvc" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="460" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="psvc_m" parent="psvc" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ criarProposta(idTroca: String, idJogador: String, idCartaOfertada: String): Proposta&lt;br&gt;+ consultarPropostas(filtro: FiltroPropostas, paginacao: Pageable): Page&amp;lt;Proposta&amp;gt;&lt;br&gt;+ consultarPropostas(idTroca: String, paginacao: Pageable): Page&amp;lt;Proposta&amp;gt;&lt;br&gt;+ buscarProposta(idProposta: String): Proposta&lt;br&gt;+ aceitarProposta(idProposta: String): Proposta&lt;br&gt;+ cancelarProposta(idProposta: String): Proposta&lt;br&gt;- validarOrdenacao(ordenacao: Sort): void" vertex="1">
+          <mxGeometry height="188" width="460" y="146" as="geometry" />
+        </mxCell>
+        <mxCell id="pub" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;dashed=1;fontColor=#666666;strokeColor=#666666;" value="«interface»&lt;br&gt;&lt;b&gt;PublicadorEventos&lt;/b&gt;" vertex="1">
+          <mxGeometry height="84" width="300" x="1440" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="pub_m" parent="pub" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ publicar(evento: TrocaRealizadaEvento): void" vertex="1">
+          <mxGeometry height="44" width="300" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pubimpl" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;dashed=1;fontColor=#666666;strokeColor=#666666;" value="&lt;b&gt;BrokerPublicador&lt;/b&gt;" vertex="1">
+          <mxGeometry height="70" width="300" x="1440" y="302" as="geometry" />
+        </mxCell>
+        <mxCell id="pubimpl_m" parent="pubimpl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ publicar(evento: TrocaRealizadaEvento): void" vertex="1">
+          <mxGeometry height="44" width="300" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="evt" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;dashed=1;fontColor=#666666;strokeColor=#666666;" value="«record»&lt;br&gt;&lt;b&gt;TrocaRealizadaEvento&lt;/b&gt;" vertex="1">
+          <mxGeometry height="156" width="300" x="1440" y="410" as="geometry" />
         </mxCell>
         <mxCell id="evt_a" parent="evt" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ idTroca: String&lt;br&gt;+ idJogadorOfertante: String&lt;br&gt;+ idJogadorAceito: String&lt;br&gt;+ idCartaOfertada: String&lt;br&gt;+ idCartaRecebida: String&lt;br&gt;+ dataHora: Instant" vertex="1">
-          <mxGeometry height="128" width="300" y="26" as="geometry" />
+          <mxGeometry height="116" width="300" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="troca" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;Troca&lt;/b&gt;" vertex="1">
-          <mxGeometry height="232" width="400" x="330" y="330" as="geometry" />
+        <mxCell id="trepo" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«interface»&lt;br&gt;&lt;b&gt;TrocaRepository&lt;/b&gt;" vertex="1">
+          <mxGeometry height="84" width="440" x="340" y="420" as="geometry" />
         </mxCell>
-        <mxCell id="troca_a" parent="troca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- id: String&lt;br&gt;- idJogador: String&lt;br&gt;- status: StatusTroca&lt;br&gt;- limitePropostas: int&lt;br&gt;- cartaOfertada: Carta&lt;br&gt;- cartaDesejada: Carta [0..1]&lt;br&gt;- propostas: List&amp;lt;Proposta&amp;gt;" vertex="1">
-          <mxGeometry height="114" width="400" y="26" as="geometry" />
+        <mxCell id="trepo_m" parent="trepo" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="JpaRepository&amp;lt;Troca, String&amp;gt;&lt;br&gt;JpaSpecificationExecutor&amp;lt;Troca&amp;gt;" vertex="1">
+          <mxGeometry height="44" width="440" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="troca_l" parent="troca" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
-          <mxGeometry height="4" width="400" y="140" as="geometry" />
+        <mxCell id="prepo" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«interface»&lt;br&gt;&lt;b&gt;PropostaRepository&lt;/b&gt;" vertex="1">
+          <mxGeometry height="156" width="460" x="880" y="420" as="geometry" />
         </mxCell>
-        <mxCell id="troca_m" parent="troca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ adicionarProposta(proposta: Proposta): void&lt;br&gt;+ aceitarProposta(idProposta: String): void&lt;br&gt;+ cancelar(): void&lt;br&gt;+ getPropostas(): List&amp;lt;Proposta&amp;gt;" vertex="1">
-          <mxGeometry height="88" width="400" y="144" as="geometry" />
+        <mxCell id="prepo_m" parent="prepo" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ findByIdTrocaAndStatus(idTroca: String, status: StatusProposta): List&amp;lt;Proposta&amp;gt;&lt;br&gt;+ countByIdTrocaAndStatus(idTroca: String, status: StatusProposta): long&lt;br&gt;(+ JpaRepository&amp;lt;Proposta, String&amp;gt;, JpaSpecificationExecutor&amp;lt;Proposta&amp;gt;)" vertex="1">
+          <mxGeometry height="116" width="460" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="prop" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;Proposta&lt;/b&gt;" vertex="1">
-          <mxGeometry height="190" width="260" x="-90" y="350" as="geometry" />
+        <mxCell id="troca" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«entity»&lt;br&gt;&lt;b&gt;Troca&lt;/b&gt;" vertex="1">
+          <mxGeometry height="316" width="440" x="340" y="620" as="geometry" />
         </mxCell>
-        <mxCell id="prop_a" parent="prop" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- id: String&lt;br&gt;- idJogador: String&lt;br&gt;- status: StatusProposta&lt;br&gt;- cartaOfertada: Carta" vertex="1">
-          <mxGeometry height="88" width="260" y="26" as="geometry" />
+        <mxCell id="troca_a" parent="troca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- id: String&lt;br&gt;- idJogador: String&lt;br&gt;- status: StatusTroca&lt;br&gt;- limitePropostas: int&lt;br&gt;- idCartaOfertada: String&lt;br&gt;- idCartaDesejada: String [0..1]&lt;br&gt;- criadaEm: Instant&lt;br&gt;- versao: Long" vertex="1">
+          <mxGeometry height="152" width="440" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="prop_l" parent="prop" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
-          <mxGeometry height="8" width="260" y="114" as="geometry" />
+        <mxCell id="troca_l0" parent="troca" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="440" y="192" as="geometry" />
         </mxCell>
-        <mxCell id="prop_m" parent="prop" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ aceitar(): void&lt;br&gt;+ recusar(): void&lt;br&gt;+ cancelar(): void" vertex="1">
-          <mxGeometry height="68" width="260" y="122" as="geometry" />
+        <mxCell id="troca_m" parent="troca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ Troca(idJogador: String, idCartaOfertada: String, idCartaDesejada: String, limitePropostas: int)&lt;br&gt;+ estaAberta(): boolean&lt;br&gt;+ cancelar(): void&lt;br&gt;+ concluir(): void&lt;br&gt;- exigirAberta(acao: String): void" vertex="1">
+          <mxGeometry height="116" width="440" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="prop" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«entity»&lt;br&gt;&lt;b&gt;Proposta&lt;/b&gt;" vertex="1">
+          <mxGeometry height="298" width="460" x="880" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="prop_a" parent="prop" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- id: String&lt;br&gt;- idTroca: String&lt;br&gt;- idJogador: String&lt;br&gt;- idCartaOfertada: String&lt;br&gt;- status: StatusProposta&lt;br&gt;- criadaEm: Instant" vertex="1">
+          <mxGeometry height="116" width="460" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="prop_l0" parent="prop" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="460" y="156" as="geometry" />
+        </mxCell>
+        <mxCell id="prop_m" parent="prop" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ Proposta(idTroca: String, idJogador: String, idCartaOfertada: String)&lt;br&gt;+ estaPendente(): boolean&lt;br&gt;+ aceitar(): void&lt;br&gt;+ recusar(): void&lt;br&gt;+ cancelar(): void&lt;br&gt;- exigirPendente(acao: String): void" vertex="1">
+          <mxGeometry height="134" width="460" y="164" as="geometry" />
         </mxCell>
         <mxCell id="stTroca" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«enumeration»&lt;br&gt;&lt;b&gt;StatusTroca&lt;/b&gt;" vertex="1">
-          <mxGeometry height="108" width="180" x="840" y="470" as="geometry" />
+          <mxGeometry height="102" width="200" x="20" y="680" as="geometry" />
         </mxCell>
         <mxCell id="stTroca_a" parent="stTroca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="ABERTA&lt;br&gt;CONCLUIDA&lt;br&gt;CANCELADA" vertex="1">
-          <mxGeometry height="68" width="180" y="40" as="geometry" />
+          <mxGeometry height="62" width="200" y="40" as="geometry" />
         </mxCell>
         <mxCell id="stProp" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«enumeration»&lt;br&gt;&lt;b&gt;StatusProposta&lt;/b&gt;" vertex="1">
-          <mxGeometry height="128" width="180" x="-70" y="578" as="geometry" />
+          <mxGeometry height="120" width="200" x="1440" y="680" as="geometry" />
         </mxCell>
         <mxCell id="stProp_a" parent="stProp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="PENDENTE&lt;br&gt;ACEITA&lt;br&gt;RECUSADA&lt;br&gt;CANCELADA" vertex="1">
-          <mxGeometry height="88" width="180" y="40" as="geometry" />
+          <mxGeometry height="80" width="200" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="carta" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="&lt;b&gt;Carta&lt;/b&gt;" vertex="1">
-          <mxGeometry height="74" width="200" x="410" y="632" as="geometry" />
+        <mxCell id="fTroca" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«record»&lt;br&gt;&lt;b&gt;FiltroTrocas&lt;/b&gt;" vertex="1">
+          <mxGeometry height="84" width="270" x="20" y="330" as="geometry" />
         </mxCell>
-        <mxCell id="carta_a" parent="carta" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="- id: String&lt;br&gt;- nome: String" vertex="1">
-          <mxGeometry height="48" width="200" y="26" as="geometry" />
+        <mxCell id="fTroca_a" parent="fTroca" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ status: StatusTroca&lt;br&gt;+ idJogador: String" vertex="1">
+          <mxGeometry height="44" width="270" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="e_comp" edge="1" parent="1" source="prop_a" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=diamondThin;endFill=1;endSize=16;exitX=1.003;exitY=0.266;entryX=0;entryY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;" target="troca" value="">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="fProp" parent="1" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;whiteSpace=wrap;" value="«record»&lt;br&gt;&lt;b&gt;FiltroPropostas&lt;/b&gt;" vertex="1">
+          <mxGeometry height="102" width="300" x="1440" y="31" as="geometry" />
         </mxCell>
-        <mxCell id="e_comp_m0" connectable="0" parent="e_comp" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;" value="0..*" vertex="1">
-          <mxGeometry relative="1" x="-1" as="geometry">
-            <mxPoint x="10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_comp_m1" connectable="0" parent="e_comp" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
-          <mxGeometry relative="1" x="0.9952" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_t_of" edge="1" parent="1" source="troca" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0.6;exitY=1;entryX=0.828;entryY=0.025;entryDx=0;entryDy=0;entryPerimeter=0;" target="carta" value="ofertada">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_t_of_m1" connectable="0" parent="e_t_of" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_t_de" edge="1" parent="1" source="troca_m" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0.367;exitY=0.997;entryX=0.336;entryY=0.025;entryDx=0;entryDy=0;entryPerimeter=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="carta" value="desejada">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_t_de_m1" connectable="0" parent="e_t_de" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="0..1" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_p_of" edge="1" parent="1" source="prop" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=1;exitY=0.85;entryX=0;entryY=0.5;" target="carta" value="ofertada">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="170" y="670" />
-              <mxPoint x="280" y="670" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_p_of_m1" connectable="0" parent="e_p_of" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_svc_inv" edge="1" parent="1" source="svc_a" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=-0.004;exitY=0.316;entryX=1;entryY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="inv" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_svc_inv_m1" connectable="0" parent="e_svc_inv" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_svc_pub" edge="1" parent="1" source="svc_a" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=1.001;exitY=0.177;entryX=0;entryY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="pub" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_svc_pub_m1" connectable="0" parent="e_svc_pub" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry">
-            <mxPoint x="-10" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_svc_evt" edge="1" parent="1" source="svc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=1;exitY=0.85;entryX=0;entryY=0.2;" target="evt" value="«cria»">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_svc_troca" edge="1" parent="1" source="svc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="troca" value="«usa»">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="fProp_a" parent="fProp" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;whiteSpace=wrap;" value="+ idTroca: String&lt;br&gt;+ status: StatusProposta&lt;br&gt;+ idJogador: String" vertex="1">
+          <mxGeometry height="62" width="300" y="40" as="geometry" />
         </mxCell>
         <mxCell id="e_inv_impl" edge="1" parent="1" source="invimpl" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=block;endFill=0;endSize=12;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="inv" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_pub_impl" edge="1" parent="1" source="pubimpl" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=block;endFill=0;endSize=12;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="pub" value="">
+        <mxCell id="e_pub_impl" edge="1" parent="1" source="pubimpl" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=block;endFill=0;endSize=12;exitX=0.5;exitY=0;entryX=0.5;entryY=1;dashed=1;fontColor=#666666;strokeColor=#666666;" target="pub" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t_inv" edge="1" parent="1" source="tsvc_a" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0;exitY=0.02;entryX=1;entryY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="inv" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_t_inv_m0" connectable="0" parent="e_t_inv" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_inv" edge="1" parent="1" source="psvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0.15;exitY=0;entryX=0.5;entryY=0;" target="inv" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="949" y="15" />
+              <mxPoint x="155" y="15" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_inv_m0" connectable="0" parent="e_p_inv" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_t" edge="1" parent="1" source="psvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="tsvc" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_t_m0" connectable="0" parent="e_p_t" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_pub" edge="1" parent="1" source="psvc_m" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=1.004;exitY=0.136;entryX=0;entryY=0.5;dashed=1;fontColor=#666666;strokeColor=#666666;exitDx=0;exitDy=0;exitPerimeter=0;" target="pub" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_pub_m0" connectable="0" parent="e_p_pub" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_evt" edge="1" parent="1" source="psvc_m" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=1.004;exitY=0.93;entryX=0;entryY=0.3;dashed=1;fontColor=#666666;strokeColor=#666666;exitDx=0;exitDy=0;exitPerimeter=0;" target="evt" value="«cria»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t_trepo" edge="1" parent="1" source="tsvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0.3;exitY=1;entryX=0.3;entryY=0;" target="trepo" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t_prepo" edge="1" parent="1" source="tsvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=1;exitY=0.92;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" target="prepo" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="281" />
+              <mxPoint x="830" y="498" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_p_prepo" edge="1" parent="1" source="psvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="prepo" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_trepo_troca" edge="1" parent="1" source="trepo" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="troca" value="«persiste»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_prepo_prop" edge="1" parent="1" source="prepo" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="prop" value="«persiste»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_prop_troca" edge="1" parent="1" source="prop" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0;exitY=0.25;entryX=1;entryY=0.25;" target="troca" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="699" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_prop_troca_m0" connectable="0" parent="e_prop_troca" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-1" as="geometry">
+            <mxPoint x="10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_prop_troca_m1" connectable="0" parent="e_prop_troca" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;" value="1" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-10" y="-4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_troca_st" edge="1" parent="1" source="troca" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=0;exitY=0.25;entryX=1;entryY=0.5;" target="stTroca" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_prop_st" edge="1" parent="1" source="prop" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;endArrow=open;endFill=0;endSize=10;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" target="stProp" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t_f" edge="1" parent="1" source="tsvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=0;exitY=0.85;entryX=1;entryY=0.5;" target="fTroca" value="«usa»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_p_f" edge="1" parent="1" source="psvc" style="html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;endSize=10;exitX=1;exitY=0.15;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="fProp" value="«usa»">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
