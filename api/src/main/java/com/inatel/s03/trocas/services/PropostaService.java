@@ -4,9 +4,11 @@ import com.inatel.s03.trocas.exceptions.ParametroInvalidoException;
 import com.inatel.s03.trocas.exceptions.RecursoNaoEncontradoException;
 import com.inatel.s03.trocas.exceptions.RegraNegocioException;
 import com.inatel.s03.trocas.integracoes.Inventario;
+import com.inatel.s03.trocas.proposta.FiltroPropostas;
 import com.inatel.s03.trocas.proposta.Proposta;
 import com.inatel.s03.trocas.proposta.StatusProposta;
 import com.inatel.s03.trocas.repositories.PropostaRepository;
+import com.inatel.s03.trocas.repositories.PropostaSpecs;
 import com.inatel.s03.trocas.troca.Troca;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,15 +60,24 @@ public class PropostaService {
         return propostaRepository.save(proposta);
     }
 
+    /** Caso de uso "Consultar propostas de uma troca", com filtros opcionais de status e jogador. */
     @Transactional(readOnly = true)
-    public Page<Proposta> consultarPropostas(String idTroca, Pageable paginacao) {
-        trocaService.buscarTroca(idTroca);
+    public Page<Proposta> consultarPropostas(FiltroPropostas filtro, Pageable paginacao) {
+        trocaService.buscarTroca(filtro.idTroca()); // 404 se a troca não existir, em vez de uma lista vazia
         validarOrdenacao(paginacao.getSort());
 
+        // Desempate pelo id: sem uma ordem totalmente definida, itens com o mesmo valor
+        // de ordenação podem se repetir ou sumir entre uma página e outra.
         Pageable comDesempate = PageRequest.of(paginacao.getPageNumber(), paginacao.getPageSize(),
                 paginacao.getSort().and(Sort.by("id")));
 
-        return propostaRepository.findByIdTroca(idTroca, comDesempate);
+        return propostaRepository.findAll(PropostaSpecs.comFiltro(filtro), comDesempate);
+    }
+
+    /** Todas as propostas de uma troca, sem filtros (usado por GET /trocas/{id}/propostas). */
+    @Transactional(readOnly = true)
+    public Page<Proposta> consultarPropostas(String idTroca, Pageable paginacao) {
+        return consultarPropostas(new FiltroPropostas(idTroca, null, null), paginacao);
     }
 
     @Transactional(readOnly = true)

@@ -36,11 +36,18 @@ public class PropostaController {
         return ResponseEntity.created(location).body(PropostaResponse.de(proposta));
     }
 
-    @GetMapping
-    public PaginaResponse<PropostaResponse> listar(
+    /**
+     * POST /propostas/consultar?page=1&perPage=20&sort=criadaEm,asc
+     * Corpo: { "idTroca": "...", "status": "PENDENTE", "idJogador": "j2" }
+     * Só idTroca é obrigatório. Padrão: página 1, 20 por página, mais antigas primeiro.
+     * É POST (e não GET) porque os critérios vão no corpo, e o corpo de um GET não é
+     * enviado por todos os clientes. Não altera nada no servidor.
+     */
+    @PostMapping("/consultar")
+    public PaginaResponse<PropostaResponse> consultar(
             @RequestBody @Valid ConsultarPropostasRequest request,
             @PageableDefault(size = 20, sort = "criadaEm", direction = Sort.Direction.ASC) Pageable paginacao) {
-        return PaginaResponse.de(propostaService.consultarPropostas(request.idTroca(), paginacao),
+        return PaginaResponse.de(propostaService.consultarPropostas(request.paraFiltro(), paginacao),
                 PropostaResponse::de);
     }
 

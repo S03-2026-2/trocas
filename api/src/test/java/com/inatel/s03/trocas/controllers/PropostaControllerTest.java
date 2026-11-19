@@ -132,18 +132,16 @@ class PropostaControllerTest {
                 .andExpect(jsonPath("$.code").value("BUSINESS_RULE_VIOLATION"));
     }
 
-    // ---------- Consultar: GET /propostas (idTroca no corpo) ----------
-
     @Test
-    void listaAsPropostasDeUmaTrocaPeloCorpo() throws Exception {
+    void consultaAsPropostasDeUmaTroca() throws Exception {
         String troca = criarTroca("dono", null, 5);
         String outraTroca = criarTroca("dono", null, 5);
         String p1 = criarProposta(troca, "j1", "c1");
         String p2 = criarProposta(troca, "j2", "c2");
         criarProposta(outraTroca, "j3", "c3"); // de outra troca, não deve aparecer
 
-        mvc.perform(get("/propostas").contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"idTroca\": \"%s\" }".formatted(troca)))
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoConsulta(troca)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(2)))
                 .andExpect(jsonPath("$.data[0].id").value(p1)) // mais antigas primeiro
@@ -154,30 +152,95 @@ class PropostaControllerTest {
     }
 
     @Test
-    void listagemPeloCorpoPagina() throws Exception {
+    void consultaFiltraPorStatus() throws Exception {
+        String troca = criarTroca("dono", null, 5);
+        String pendente = criarProposta(troca, "j1", "c1");
+        String cancelada = criarProposta(troca, "j2", "c2");
+        mvc.perform(post("/propostas/{id}/cancelar", cancelada)).andExpect(status().isOk());
+
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"idTroca\": \"%s\", \"status\": \"PENDENTE\" }".formatted(troca)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").value(pendente));
+
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"idTroca\": \"%s\", \"status\": \"CANCELADA\" }".formatted(troca)))
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").value(cancelada));
+    }
+
+    @Test
+    void consultaFiltraPorJogador() throws Exception {
+        String troca = criarTroca("dono", null, 5);
+        criarProposta(troca, "j1", "c1");
+        String doJ2 = criarProposta(troca, "j2", "c2");
+
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"idTroca\": \"%s\", \"idJogador\": \"j2\" }".formatted(troca)))
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").value(doJ2))
+                .andExpect(jsonPath("$.pagination.total").value(1));
+    }
+
+    @Test
+    void consultaCombinaOsFiltros() throws Exception {
+        String troca = criarTroca("dono", null, 5);
+        String p1 = criarProposta(troca, "j1", "c1");
+        criarProposta(troca, "j2", "c2");
+        String p3 = criarProposta(troca, "j1", "c3");
+        mvc.perform(post("/propostas/{id}/cancelar", p3)).andExpect(status().isOk());
+
+        // só as pendentes do j1: a p1 (a p3 é do j1, mas está cancelada; a do j2 é de outro jogador)
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"idTroca\": \"%s\", \"status\": \"PENDENTE\", \"idJogador\": \"j1\" }"
+                                .formatted(troca)))
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].id").value(p1));
+    }
+
+    @Test
+    void consultaPagina() throws Exception {
         String troca = criarTroca("dono", null, 5);
         criarProposta(troca, "j1", "c1");
         criarProposta(troca, "j2", "c2");
         criarProposta(troca, "j3", "c3");
 
-        mvc.perform(get("/propostas").param("perPage", "2").contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"idTroca\": \"%s\" }".formatted(troca)))
+        mvc.perform(post("/propostas/consultar").param("perPage", "2").contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoConsulta(troca)))
                 .andExpect(jsonPath("$.data", hasSize(2)))
                 .andExpect(jsonPath("$.pagination.total").value(3))
                 .andExpect(jsonPath("$.pagination.lastPage").value(2));
     }
 
     @Test
-    void listagemPeloCorpoExigeIdTroca() throws Exception {
-        mvc.perform(get("/propostas").contentType(MediaType.APPLICATION_JSON).content("{}"))
+    void consultaExigeIdTroca() throws Exception {
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"status\": \"PENDENTE\" }"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
 
     @Test
-    void listagemPeloCorpoDeTrocaInexistenteRetorna404() throws Exception {
-        mvc.perform(get("/propostas").contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"idTroca\": \"nao-existe\" }"))
+    void consultaRejeitaCorpoAusenteOuStatusInvalido() throws Exception {
+        mvc.perform(post("/propostas/consultar"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content("{ \"idTroca\": \"x\", \"status\": \"INEXISTENTE\" }"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"));
+    }
+
+    @Test
+    void consultaDeTrocaInexistenteRetorna404() throws Exception {
+        mvc.perform(post("/propostas/consultar").contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoConsulta("nao-existe")))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("NOT_FOUND"));
     }
@@ -186,10 +249,15 @@ class PropostaControllerTest {
     void naoOrdenaPorCampoNaoPermitido() throws Exception {
         String troca = criarTroca("dono", null, 5);
 
-        mvc.perform(get("/propostas").param("sort", "versao").contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"idTroca\": \"%s\" }".formatted(troca)))
+        mvc.perform(post("/propostas/consultar").param("sort", "versao").contentType(MediaType.APPLICATION_JSON)
+                        .content(corpoConsulta(troca)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_PARAMETER"));
+    }
+
+    @Test
+    void getEmPropostasNaoExisteMais() throws Exception {
+        mvc.perform(get("/propostas")).andExpect(status().isMethodNotAllowed());
     }
 
     // ---------- Consultar: GET /trocas/{id}/propostas ----------
@@ -324,5 +392,9 @@ class PropostaControllerTest {
         return """
                 { "idTroca": "%s", "idJogador": "%s", "idCartaOfertada": "%s" }
                 """.formatted(idTroca, idJogador, idCarta);
+    }
+
+    private static String corpoConsulta(String idTroca) {
+        return "{ \"idTroca\": \"%s\" }".formatted(idTroca);
     }
 }

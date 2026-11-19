@@ -47,7 +47,7 @@ Se a porta 8080 já estiver em uso (por exemplo, pela API rodando na IDE), escol
 | `GET` | `/trocas/{id}/propostas?page=&perPage=&sort=` | Lista as propostas de uma troca |
 | `POST` | `/trocas/{id}/cancelar` | Cancela uma troca aberta (e suas propostas pendentes) |
 | `POST` | `/propostas` | Cria uma proposta (201 + header `Location`) |
-| `GET` | `/propostas?page=&perPage=&sort=` | Lista as propostas de uma troca; o `idTroca` vai no **corpo** |
+| `POST` | `/propostas/consultar?page=&perPage=&sort=` | Consulta propostas de uma troca com filtros opcionais; os critérios vão no **corpo** |
 | `GET` | `/propostas/{id}` | Busca uma proposta |
 | `POST` | `/propostas/{id}/aceitar` | Aceita a proposta, conclui a troca e recusa as demais |
 | `POST` | `/propostas/{id}/cancelar` | Cancela uma proposta pendente |
@@ -85,18 +85,24 @@ Resposta `201`, com o header `Location: /propostas/{id}`:
 }
 ```
 
-**Listar as propostas de uma troca**: existem duas rotas com o mesmo resultado (lista paginada, das mais antigas para as mais novas).
+**Consultar propostas** (`POST /propostas/consultar`): os critérios vão no corpo; só `idTroca` é obrigatório. É um `POST` porque o corpo de um `GET` não é enviado por todos os clientes; a consulta não altera nada.
 
 ```bash
-# id da troca no corpo
-curl -X GET "http://localhost:8080/propostas?page=1&perPage=20" -H "Content-Type: application/json" \
-  -d '{"idTroca":"<id da troca>"}'
-
-# id da troca na URL (a partir do TrocaController)
-curl "http://localhost:8080/trocas/<id da troca>/propostas"
+curl -X POST "http://localhost:8080/propostas/consultar?page=1&perPage=20" -H "Content-Type: application/json" \
+  -d '{"idTroca":"<id da troca>","status":"PENDENTE","idJogador":"jogador2"}'
 ```
 
-> `GET` com corpo funciona no curl e no Postman, mas o `fetch` do navegador e alguns proxies não permitem. Quem chama pelo navegador deve usar `/trocas/{id}/propostas`.
+| Campo do corpo | Obrigatório | Descrição |
+|---|---|---|
+| `idTroca` | sim | Troca cujas propostas serão consultadas |
+| `status` | não | `PENDENTE`, `ACEITA`, `RECUSADA` ou `CANCELADA` |
+| `idJogador` | não | Só as propostas desse jogador |
+
+O resultado é paginado, das mais antigas para as mais novas. Para listar **todas** as propostas de uma troca, sem filtro, também existe `GET /trocas/{id}/propostas`:
+
+```bash
+curl "http://localhost:8080/trocas/<id da troca>/propostas"
+```
 
 **Status da proposta:**
 

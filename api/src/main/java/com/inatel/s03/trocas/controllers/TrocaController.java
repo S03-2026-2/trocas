@@ -64,7 +64,7 @@ public class TrocaController {
 
     /**
      * GET /trocas/{id}/propostas?page=1&perPage=20&sort=criadaEm,asc
-     * Mesmo resultado do GET /propostas (que recebe o id da troca no corpo).
+     * Todas as propostas da troca, sem filtros. Para filtrar por status ou jogador, use POST /propostas/consultar.
      */
     @GetMapping("/{id}/propostas")
     public PaginaResponse<PropostaResponse> listarPropostas(
