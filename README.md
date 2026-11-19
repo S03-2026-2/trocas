@@ -101,6 +101,7 @@ A API roda no **Render** (via Docker) e o banco é um **MySQL na Aiven**.
    | `DB_USERNAME` | usuário da Aiven |
    | `DB_PASSWORD` | senha da Aiven |
    | `CORS_ALLOWED_ORIGINS` | URLs dos front-ends que chamam a API pelo navegador, separadas por vírgula (opcional) |
+   | `BROKER_URL` | URL do broker de eventos, para onde vai o evento de troca realizada (opcional; padrão `http://localhost:8000`) |
 
    > ⚠️ **Não copie a *Service URI* da Aiven** (`mysql://usuario:senha@host:porta/defaultdb?ssl-mode=REQUIRED`) para a `DB_URL`: ela não está no formato JDBC. Monte a URL como na tabela, começando com `jdbc:mysql://`, sem usuário e senha, e com `sslMode` (sem hífen).
 
