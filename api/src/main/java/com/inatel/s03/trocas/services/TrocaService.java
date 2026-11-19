@@ -4,6 +4,9 @@ import com.inatel.s03.trocas.exceptions.ParametroInvalidoException;
 import com.inatel.s03.trocas.exceptions.RecursoNaoEncontradoException;
 import com.inatel.s03.trocas.exceptions.RegraNegocioException;
 import com.inatel.s03.trocas.integracoes.Inventario;
+import com.inatel.s03.trocas.proposta.Proposta;
+import com.inatel.s03.trocas.proposta.StatusProposta;
+import com.inatel.s03.trocas.repositories.PropostaRepository;
 import com.inatel.s03.trocas.repositories.TrocaRepository;
 import com.inatel.s03.trocas.repositories.TrocaSpecs;
 import com.inatel.s03.trocas.troca.FiltroTrocas;
@@ -27,6 +30,8 @@ public class TrocaService {
 
     private final TrocaRepository trocaRepository;
     private final Inventario inventario;
+
+    private final PropostaRepository propostaRepository;
 
     /** Caso de uso "Criar troca" (inclui "Validar carta requerida"). */
     @Transactional
@@ -65,8 +70,9 @@ public class TrocaService {
     public Troca cancelarTroca(String idTroca) {
         Troca troca = buscarTroca(idTroca);
         troca.cancelar();
-        // TODO (propostas): cancelar as propostas PENDENTES desta troca na mesma transação.
-        return troca; // alterações salvas automaticamente no commit (entidade gerenciada)
+        propostaRepository.findByIdTrocaAndStatus(idTroca, StatusProposta.PENDENTE)
+                .forEach(Proposta::cancelar);
+        return troca;
     }
 
     private static void validarOrdenacao(Sort ordenacao) {

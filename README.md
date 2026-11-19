@@ -37,25 +37,96 @@ Se a porta 8080 já estiver em uso (por exemplo, pela API rodando na IDE), escol
 ./mvnw test
 ```
 
-## Endpoints
+### Endpoints
 
 | Método | Rota | Descrição |
 |---|---|---|
 | `POST` | `/trocas` | Cria uma troca (201 + header `Location`) |
 | `GET` | `/trocas?status=&idJogador=&page=&perPage=&sort=` | Lista trocas com filtros e paginação |
 | `GET` | `/trocas/{id}` | Busca uma troca |
-| `POST` | `/trocas/{id}/cancelar` | Cancela uma troca aberta |
+| `GET` | `/trocas/{id}/propostas?page=&perPage=&sort=` | Lista as propostas de uma troca |
+| `POST` | `/trocas/{id}/cancelar` | Cancela uma troca aberta (e suas propostas pendentes) |
+| `POST` | `/propostas` | Cria uma proposta (201 + header `Location`) |
+| `GET` | `/propostas?page=&perPage=&sort=` | Lista as propostas de uma troca; o `idTroca` vai no **corpo** |
+| `GET` | `/propostas/{id}` | Busca uma proposta |
+| `POST` | `/propostas/{id}/aceitar` | Aceita a proposta, conclui a troca e recusa as demais |
+| `POST` | `/propostas/{id}/cancelar` | Cancela uma proposta pendente |
 | `GET` | `/actuator/health` | Health check |
 
-Exemplo:
+- **Listagens:** respondem `{ "data": [...], "pagination": { "total", "page", "perPage", "lastPage" } }`. A primeira página é a 1.
+- **Erros:** seguem a RFC 9457 (`application/problem+json`), com um campo extra `code` (ex.: `NOT_FOUND`, `BUSINESS_RULE_VIOLATION`).
+
+### Trocas
 
 ```bash
 curl -i -X POST http://localhost:8080/trocas -H "Content-Type: application/json" \
   -d '{"idJogador":"jogador1","idCartaOfertada":"c1","idCartaDesejada":"c2","limitePropostas":3}'
 ```
 
-- **Listagens:** respondem `{ "data": [...], "pagination": { "total", "page", "perPage", "lastPage" } }`. A primeira página é a 1.
-- **Erros:** seguem a RFC 9457 (`application/problem+json`), com um campo extra `code` (ex.: `NOT_FOUND`, `BUSINESS_RULE_VIOLATION`).
+`idCartaDesejada` é opcional. Sem ela, o jogador aceita propostas com qualquer carta.
+
+### Propostas
+
+Outros jogadores enviam propostas para uma troca aberta; o dono escolhe uma delas.
+
+**Criar** (`POST /propostas`):
+
+```bash
+curl -i -X POST http://localhost:8080/propostas -H "Content-Type: application/json" \
+  -d '{"idTroca":"<id da troca>","idJogador":"jogador2","idCartaOfertada":"c2"}'
+```
+
+Resposta `201`, com o header `Location: /propostas/{id}`:
+
+```json
+{
+  "id": "…", "idTroca": "…", "idJogador": "jogador2", "idCartaOfertada": "c2",
+  "status": "PENDENTE", "criadaEm": "2026-11-18T23:10:00Z"
+}
+```
+
+**Listar as propostas de uma troca**: existem duas rotas com o mesmo resultado (lista paginada, das mais antigas para as mais novas).
+
+```bash
+# id da troca no corpo
+curl -X GET "http://localhost:8080/propostas?page=1&perPage=20" -H "Content-Type: application/json" \
+  -d '{"idTroca":"<id da troca>"}'
+
+# id da troca na URL (a partir do TrocaController)
+curl "http://localhost:8080/trocas/<id da troca>/propostas"
+```
+
+> `GET` com corpo funciona no curl e no Postman, mas o `fetch` do navegador e alguns proxies não permitem. Quem chama pelo navegador deve usar `/trocas/{id}/propostas`.
+
+**Status da proposta:**
+
+| Status | Quando |
+|---|---|
+| `PENDENTE` | Criada e aguardando o dono da troca |
+| `ACEITA` | O dono escolheu esta proposta (a troca vira `CONCLUIDA`) |
+| `RECUSADA` | Outra proposta da mesma troca foi aceita |
+| `CANCELADA` | O jogador cancelou a proposta ou a troca foi cancelada |
+
+Só propostas `PENDENTE` podem ser aceitas ou canceladas.
+
+**Regras ao criar uma proposta** (violá-las devolve `422 BUSINESS_RULE_VIOLATION`):
+
+- a troca precisa estar `ABERTA`;
+- o dono da troca não pode propor para a própria troca;
+- se a troca tem carta desejada, a proposta precisa oferecer exatamente essa carta (sem carta desejada, qualquer uma serve);
+- o jogador precisa possuir a carta (consulta ao `Inventario`);
+- só as propostas `PENDENTE` contam para o `limitePropostas`, então cancelar uma proposta libera a vaga.
+
+**Aceitar** (`POST /propostas/{id}/aceitar`) aceita a proposta, conclui a troca e recusa as demais propostas pendentes, tudo na mesma transação. **Cancelar uma troca** também cancela as propostas pendentes dela.
+
+**Códigos de erro mais comuns:**
+
+| Situação | HTTP | `code` |
+|---|---|---|
+| Troca ou proposta inexistente | 404 | `NOT_FOUND` |
+| Campo obrigatório ausente (ex.: `GET /propostas` sem `idTroca` no corpo) | 400 | `VALIDATION_ERROR` |
+| `sort` por campo não permitido (permitidos: `criadaEm`, `idJogador`, `status`) | 400 | `INVALID_PARAMETER` |
+| Regra de negócio violada | 422 | `BUSINESS_RULE_VIOLATION` |
 
 ## Banco de dados e migrações
 

@@ -2,7 +2,9 @@ package com.inatel.s03.trocas.controllers;
 
 import com.inatel.s03.trocas.dtos.CriarTrocaRequest;
 import com.inatel.s03.trocas.dtos.PaginaResponse;
+import com.inatel.s03.trocas.dtos.PropostaResponse;
 import com.inatel.s03.trocas.dtos.TrocaResponse;
+import com.inatel.s03.trocas.services.PropostaService;
 import com.inatel.s03.trocas.services.TrocaService;
 import com.inatel.s03.trocas.troca.FiltroTrocas;
 import com.inatel.s03.trocas.troca.Troca;
@@ -23,6 +25,7 @@ import java.net.URI;
 public class TrocaController {
 
     private final TrocaService trocaService;
+    private final PropostaService propostaService;
 
     /** 201 Created, com o header Location apontando para a troca criada. */
     @PostMapping
@@ -58,4 +61,16 @@ public class TrocaController {
     public TrocaResponse cancelar(@PathVariable String id) {
         return TrocaResponse.de(trocaService.cancelarTroca(id));
     }
+
+    /**
+     * GET /trocas/{id}/propostas?page=1&perPage=20&sort=criadaEm,asc
+     * Mesmo resultado do GET /propostas (que recebe o id da troca no corpo).
+     */
+    @GetMapping("/{id}/propostas")
+    public PaginaResponse<PropostaResponse> listarPropostas(
+            @PathVariable String id,
+            @PageableDefault(size = 20, sort = "criadaEm", direction = Sort.Direction.ASC) Pageable paginacao) {
+        return PaginaResponse.de(propostaService.consultarPropostas(id, paginacao), PropostaResponse::de);
+    }
+
 }
