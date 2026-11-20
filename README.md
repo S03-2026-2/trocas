@@ -191,6 +191,148 @@ A cada push na `main`, o Render faz um novo deploy automaticamente.
 - **O Render "dorme" após ~15 min sem acesso.** A primeira requisição depois disso pode levar perto de um minuto. Antes de apresentar, acesse a API para acordá-la.
 - **512 MB de RAM:** a JVM já está ajustada para isso no `Dockerfile`.
 
+## Principais Design Patterns
+
+Os padrões abaixo aparecem no código do serviço. Caminhos relativos a `api/src/main/java/com/inatel/s03/trocas/`.
+
+| Padrão | Categoria | Onde está |
+|---|---|---|
+| [Repository](#repository) | Arquitetural (Fowler / DDD, fora do GoF) | `repositories/PropostaRepository.java`, `repositories/TrocaRepository.java` |
+| [Strategy](#strategy) | Comportamental | `repositories/TrocaSpecs.java`, `repositories/PropostaSpecs.java` |
+| [Facade](#facade) | Estrutural | `services/PropostaService.java` |
+| [Singleton](#singleton) | Criacional | beans do Spring (`@Service`, `@Component`, `@RestController`) |
+
+### Repository
+
+**Repository Pattern**
+
+Os Services não precisam escrever comandos SQL nem gerenciar conexões diretamente, eles acessam o banco por meio dos Repositories, que disponibilizam métodos para realizar operações de persistência, como `save()`, `findById()`, `findAll()` e consultas específicas, como `countByIdTrocaAndStatus()`. Dessa forma, o Repository isola a camada de acesso a dados da camada de serviços, deixando os Services responsáveis pelas regras de negócio. O projeto possui um Repository para cada entidade principal (`Troca` e `Proposta`).
+
+[`repositories/PropostaRepository.java`](api/src/main/java/com/inatel/s03/trocas/repositories/PropostaRepository.java#L11-L17):
+
+```java
+@Repository
+public interface PropostaRepository extends JpaRepository<Proposta, String>, JpaSpecificationExecutor<Proposta> {
+
+    List<Proposta> findByIdTrocaAndStatus(String idTroca, StatusProposta status);
+
+    long countByIdTrocaAndStatus(String idTroca, StatusProposta status);
+}
+```
+
+Uso em [`services/PropostaService.java`](api/src/main/java/com/inatel/s03/trocas/services/PropostaService.java#L50-L60): a regra de negócio pergunta ao repositório sem saber que existe SQL.
+
+```java
+long pendentes = propostaRepository.countByIdTrocaAndStatus(idTroca, StatusProposta.PENDENTE);
+if (pendentes >= troca.getLimitePropostas()) {
+    throw new RegraNegocioException(...);
+}
+...
+return propostaRepository.save(proposta);
+```
+
+### Strategy
+
+Cada filtro da listagem (por status, por jogador) é um objeto `Specification`. Todos têm a mesma interface, e o repositório executa o que receber em `findAll(spec, paginacao)` sem saber qual regra é. Filtro não informado vira `null` e é ignorado. Um filtro novo é só uma nova estratégia, sem mexer no repositório nem no service.
+
+[`repositories/TrocaSpecs.java`](api/src/main/java/com/inatel/s03/trocas/repositories/TrocaSpecs.java#L17-L33):
+
+```java
+public static Specification<Troca> comFiltro(FiltroTrocas filtro) {
+    if (filtro == null) {
+        return Specification.where(null);
+    }
+    return Specification.where(comStatus(filtro.status()))
+            .and(doJogador(filtro.idJogador()));
+}
+
+private static Specification<Troca> comStatus(StatusTroca status) {
+    return status == null ? null
+            : (root, query, cb) -> cb.equal(root.get("status"), status);
+}
+```
+
+O contexto, em [`services/TrocaService.java`](api/src/main/java/com/inatel/s03/trocas/services/TrocaService.java#L59), não sabe qual regra está executando:
+
+```java
+return trocaRepository.findAll(TrocaSpecs.comFiltro(filtro), comDesempate);
+```
+
+A mesma ideia aparece em [`dtos/PaginaResponse.java`](api/src/main/java/com/inatel/s03/trocas/dtos/PaginaResponse.java#L16-L21), que recebe a estratégia de conversão (`TrocaResponse::de` ou `PropostaResponse::de`) como parâmetro:
+
+```java
+public static <E, T> PaginaResponse<T> de(Page<E> pagina, Function<E, T> conversor) {
+    return new PaginaResponse<>(
+            pagina.getContent().stream().map(conversor).toList(),
+            Paginacao.de(pagina)
+    );
+}
+```
+
+> A `Specification` (Evans e Fowler) é uma especialização de Strategy: a interface é a `Specification<T>` do Spring Data, e as lambdas são as implementações concretas.
+
+### Facade
+
+O controller chama uma linha só. Por trás dessa fachada, o service busca a proposta, busca a troca em outro service, aceita a proposta, conclui a troca e recusa as demais propostas pendentes, tudo numa única transação. O controller não conhece repositório, regra de negócio nem transação.
+
+Cliente da fachada, em [`controllers/PropostaController.java`](api/src/main/java/com/inatel/s03/trocas/controllers/PropostaController.java#L59-L62):
+
+```java
+@PostMapping("/{id}/aceitar")
+public PropostaResponse aceitar(@PathVariable String id) {
+    return PropostaResponse.de(propostaService.aceitarProposta(id));
+}
+```
+
+A fachada, em [`services/PropostaService.java`](api/src/main/java/com/inatel/s03/trocas/services/PropostaService.java#L89-L101):
+
+```java
+@Transactional
+public Proposta aceitarProposta(String idProposta) {
+    Proposta aceita = buscarProposta(idProposta);
+    Troca troca = trocaService.buscarTroca(aceita.getIdTroca());
+
+    aceita.aceitar();
+    troca.concluir();
+
+    propostaRepository.findByIdTrocaAndStatus(troca.getId(), StatusProposta.PENDENTE)
+            .forEach(Proposta::recusar);
+
+    return aceita;
+}
+```
+
+> A camada de serviço (Service Layer, do Fowler) é uma aplicação de Facade: uma interface simples na frente de um subsistema com várias classes (repositórios, entidades, outro service, inventário). O [`cancelarTroca`](api/src/main/java/com/inatel/s03/trocas/services/TrocaService.java#L68-L76) segue o mesmo modelo: cancela a troca e as propostas pendentes dela.
+
+### Singleton
+
+Classes anotadas com `@Service`, `@Component` e `@RestController` viram beans com escopo *singleton*: o Spring cria uma única instância e entrega essa mesma instância a quem precisar. O `TrocaService` usado pelo `TrocaController` é o mesmo que o `PropostaService` recebe. Ninguém faz `new TrocaService()`: o construtor gerado pelo `@RequiredArgsConstructor` recebe as dependências prontas (Injeção de Dependência).
+
+[`services/PropostaService.java`](api/src/main/java/com/inatel/s03/trocas/services/PropostaService.java#L23-L30):
+
+```java
+@Service
+@RequiredArgsConstructor
+public class PropostaService {
+    private final PropostaRepository propostaRepository;
+    private final TrocaService trocaService;   // a mesma instância usada pelo TrocaController
+    private final Inventario inventario;       // o mesmo DistribuicaoCartas usado pelo TrocaService
+```
+
+[`controllers/TrocaController.java`](api/src/main/java/com/inatel/s03/trocas/controllers/TrocaController.java#L22-L28):
+
+```java
+@RestController
+@RequestMapping("/trocas")
+@RequiredArgsConstructor
+public class TrocaController {
+
+    private final TrocaService trocaService;
+    private final PropostaService propostaService;
+```
+
+> Não há `getInstance()` nem construtor privado: é o Singleton do contêiner (IoC). Quem garante a instância única é o Spring, e a classe continua testável, porque nos testes dá para injetar um dublê no lugar dela.
+
 ## Pendências
 
 - Propostas (criar, consultar, aceitar e cancelar).
