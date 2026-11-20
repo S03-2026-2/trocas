@@ -203,7 +203,9 @@ Os padrões abaixo aparecem no código do serviço. Caminhos relativos a `api/sr
 
 ### Repository
 
-Os services nunca escrevem SQL nem abrem conexão: tratam o banco como uma coleção de trocas e propostas (`save`, `findById`, `findAll`, `countByIdTrocaAndStatus`). O repositório isola o domínio da persistência. Por isso o mesmo código roda com H2 no desenvolvimento e com MySQL em produção, mudando só a configuração. Há um repositório por agregado (`Troca` e `Proposta`).
+**Repository Pattern**
+
+Os Services não precisam escrever comandos SQL nem gerenciar conexões diretamente, eles acessam o banco por meio dos Repositories, que disponibilizam métodos para realizar operações de persistência, como `save()`, `findById()`, `findAll()` e consultas específicas, como `countByIdTrocaAndStatus()`. Dessa forma, o Repository isola a camada de acesso a dados da camada de serviços, deixando os Services responsáveis pelas regras de negócio. O projeto possui um Repository para cada entidade principal (`Troca` e `Proposta`).
 
 [`repositories/PropostaRepository.java`](api/src/main/java/com/inatel/s03/trocas/repositories/PropostaRepository.java#L11-L17):
 
